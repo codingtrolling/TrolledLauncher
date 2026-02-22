@@ -70,7 +70,13 @@ jobs:
         with:
           name: app-debug-noruntime
           path: out/app-debug-noruntime.apk
-
+      - name: Push to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create v${{ github.run_number }} --title "CodingTrolling Build ${{ github.run_number }}" --notes "Download the APK below." || true
+          gh release upload v${{ github.run_number }} out/app-debug-noruntime.apk --clobber
+          
       - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
